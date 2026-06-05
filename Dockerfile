@@ -21,4 +21,5 @@ RUN npx prisma generate --schema=database/schema.prisma
 
 EXPOSE 3001
 
-CMD ["bash", "start.sh"]
+ENTRYPOINT []
+CMD ["/bin/bash", "start.sh"]
