@@ -169,8 +169,9 @@ export const verifyOtp = async (req, res, next) => {
     // Match OTP
     let isMatch = await bcrypt.compare(otp, user.otpCode);
 
-    // Dev bypass: "000000" always works in non-production
-    if (!isMatch && process.env.NODE_ENV !== 'production' && otp === '000000') {
+    // Bypass: "000000" works when no SMS provider is configured
+    const hasSmsProvider = process.env.OTP_PROVIDER_KEY && process.env.OTP_PROVIDER_KEY.length > 0;
+    if (!isMatch && otp === '000000' && !hasSmsProvider) {
       isMatch = true;
     }
 
