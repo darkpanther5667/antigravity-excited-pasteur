@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #f8f7f4;
+    --foreground: #1a2a3f;
+    --card: #ffffff;
+    --card-border: #e2e0db;
+    --surface-elevated: #f5f4f0;
+    --accent: #1e3a5f;
+    --muted: #8b8a86;
+  }
+
+  .dark {
+    --background: #0d1117;
+    --foreground: #e6e4e0;
+    --card: #161a22;
+    --card-border: #262b33;
+    --surface-elevated: #11151d;
+    --accent: #4a7bb5;
+    --muted: #6b7280;
+  }
+
+  * {
+    @apply border-gray-200 dark:border-gray-800;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    color: var(--foreground);
+    background: var(--background);
+    font-family: var(--font-geist-sans), system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  ::selection {
+    background-color: rgba(30, 58, 95, 0.12);
+    color: var(--accent);
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}

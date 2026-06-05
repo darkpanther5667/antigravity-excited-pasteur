@@ -1,0 +1,7 @@
+.env
+node_modules/
+.next/
+data/raw/
+*.log
+.DS_Store
+LANDING_REDESIGN_NOTES.md

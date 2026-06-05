@@ -1,0 +1,227 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../backend/node_modules/.prisma/client"
+}
+
+enum Role {
+  STUDENT
+  TEACHER
+  ADMIN
+}
+
+enum Plan {
+  FREE
+  PRO
+  ELITE
+}
+
+enum Subject {
+  PHYSICS
+  CHEMISTRY
+  MATHS
+}
+
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+enum QuestionType {
+  SINGLE
+  MULTI
+  INTEGER
+  MATRIX
+}
+
+enum ExamType {
+  MAINS
+  ADVANCED
+}
+
+enum TestType {
+  FULL_MOCK
+  CHAPTER
+  PYQ
+  ADAPTIVE
+}
+
+enum ResponseStatus {
+  ANSWERED
+  UNANSWERED
+  MARKED_REVIEW
+}
+
+model User {
+  id               String      @id @default(uuid())
+  name             String
+  email            String      @unique
+  phone            String      @unique
+  passwordHash     String      @map("password_hash")
+  role             Role
+  plan             Plan
+  planExpiry       DateTime?   @map("plan_expiry")
+  instituteId      String?     @map("institute_id")
+  createdAt        DateTime    @default(now()) @map("created_at")
+  otpCode          String?     @map("otp_code")
+  otpExpiresAt     DateTime?   @map("otp_expires_at")
+  otpVerified      Boolean     @default(false) @map("otp_verified")
+  refreshToken     String?     @map("refresh_token")
+  lastLoginAt      DateTime?   @map("last_login_at")
+  resetToken       String?     @map("reset_token")
+  resetTokenExpiry DateTime?   @map("reset_token_expiry")
+  isActive         Boolean     @default(true) @map("is_active")
+
+  institute    Institute?  @relation("InstituteUsers", fields: [instituteId], references: [id])
+  questions    Question[]  @relation("UserQuestions")
+  tests        Test[]      @relation("UserTests")
+  attempts     Attempt[]   @relation("UserAttempts")
+  administeredInstitutes Institute[] @relation("InstituteAdmin")
+  orders                 Order[]
+
+  @@map("users")
+}
+
+model Question {
+  id            String        @id @default(uuid())
+  subject       Subject
+  chapter       String
+  topic         String
+  difficulty    Difficulty
+  type          QuestionType
+  questionText  String        @map("question_text")
+  optionA       String?       @map("option_a")
+  optionB       String?       @map("option_b")
+  optionC       String?       @map("option_c")
+  optionD       String?       @map("option_d")
+  correctAnswer String        @map("correct_answer")
+  solution      String
+  year          Int?
+  examType      ExamType      @map("exam_type")
+  ntaWeightage  Int           @map("nta_weightage")
+  createdBy     String        @map("created_by")
+  createdAt     DateTime      @default(now()) @map("created_at")
+  deletedAt     DateTime?     @map("deleted_at")
+
+  creator       User          @relation("UserQuestions", fields: [createdBy], references: [id])
+  testQuestions TestQuestion[] @relation("QuestionTestQuestions")
+  responses     Response[]    @relation("QuestionResponses")
+
+  @@map("questions")
+}
+
+model Test {
+  id              String        @id @default(uuid())
+  title           String
+  type            TestType
+  examType        ExamType      @map("exam_type")
+  durationMinutes Int           @map("duration_minutes")
+  totalMarks      Int           @map("total_marks")
+  instructions    String
+  scheduledAt     DateTime?     @map("scheduled_at")
+  isPublished     Boolean       @map("is_published")
+  createdBy       String        @map("created_by")
+  createdAt       DateTime      @default(now()) @map("created_at")
+  deletedAt       DateTime?     @map("deleted_at")
+
+  creator         User          @relation("UserTests", fields: [createdBy], references: [id])
+  testQuestions   TestQuestion[] @relation("TestQuestions")
+  attempts        Attempt[]     @relation("TestAttempts")
+
+  @@map("tests")
+}
+
+model TestQuestion {
+  id             String   @id @default(uuid())
+  testId         String   @map("test_id")
+  questionId     String   @map("question_id")
+  section        Subject
+  questionOrder  Int      @map("question_order")
+  marksCorrect   Int      @map("marks_correct")
+  marksIncorrect Decimal  @map("marks_incorrect") @db.Decimal(4, 2)
+
+  test           Test     @relation("TestQuestions", fields: [testId], references: [id], onDelete: Cascade)
+  question       Question @relation("QuestionTestQuestions", fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@map("test_questions")
+}
+
+model Attempt {
+  id                String     @id @default(uuid())
+  userId            String     @map("user_id")
+  testId            String     @map("test_id")
+  startedAt         DateTime   @map("started_at")
+  submittedAt       DateTime?  @map("submitted_at")
+  totalScore        Float?     @map("total_score")
+  physicsScore      Float?     @map("physics_score")
+  chemistryScore    Float?     @map("chemistry_score")
+  mathsScore        Float?     @map("maths_score")
+  percentile        Float?
+  rank              Int?
+  timeTakenSeconds  Int?       @map("time_taken_seconds")
+  timeRemaining     Int?       @map("time_remaining")
+
+  user              User       @relation("UserAttempts", fields: [userId], references: [id])
+  test              Test       @relation("TestAttempts", fields: [testId], references: [id])
+  responses         Response[] @relation("AttemptResponses")
+
+  @@map("attempts")
+}
+
+model Response {
+  id                String         @id @default(uuid())
+  attemptId         String         @map("attempt_id")
+  questionId        String         @map("question_id")
+  selectedAnswer    String?        @map("selected_answer")
+  isCorrect         Boolean?       @map("is_correct")
+  marksAwarded      Decimal?       @map("marks_awarded") @db.Decimal(4, 2)
+  timeSpentSeconds  Int            @map("time_spent_seconds")
+  status            ResponseStatus
+
+  attempt           Attempt        @relation("AttemptResponses", fields: [attemptId], references: [id], onDelete: Cascade)
+  question          Question       @relation("QuestionResponses", fields: [questionId], references: [id])
+
+  @@map("responses")
+}
+
+model Institute {
+  id      String @id @default(uuid())
+  name    String
+  city    String
+  state   String
+  adminId String? @map("admin_id")
+
+  admin   User?  @relation("InstituteAdmin", fields: [adminId], references: [id])
+  users   User[] @relation("InstituteUsers")
+
+  @@map("institutes")
+}
+
+model Order {
+  id                String      @id @default(uuid())
+  userId            String      @map("user_id")
+  plan              Plan
+  amount            Int
+  currency          String      @default("INR")
+  razorpayOrderId   String?     @map("razorpay_order_id")
+  razorpayPaymentId String?     @map("razorpay_payment_id")
+  razorpaySignature String?     @map("razorpay_signature")
+  status            OrderStatus @default(PENDING)
+  createdAt         DateTime    @default(now()) @map("created_at")
+  updatedAt         DateTime    @updatedAt @map("updated_at")
+  user              User        @relation(fields: [userId], references: [id])
+
+  @@map("orders")
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}

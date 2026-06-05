@@ -1,0 +1,53 @@
+{
+  "jee_advanced_official": {
+    "id": "jee_advanced_official",
+    "name": "JEE Advanced Official Archive",
+    "type": "official",
+    "url": "https://jeeadv.ac.in/archive.html",
+    "baseUrl": "https://jeeadv.ac.in",
+    "format": "html",
+    "legal": {
+      "confidence": "high",
+      "note": "Official JEE Advanced website. Past exam papers published for public access by JAB."
+    },
+    "extraction": {
+      "method": "html-scrape",
+      "available": ["question_paper_pdf", "answer_key_pdf"],
+      "estimated_count": 250
+    }
+  },
+  "jee_main_official": {
+    "id": "jee_main_official",
+    "name": "JEE Main Official Archive (NTA)",
+    "type": "official",
+    "url": "https://jeemain.nta.nic.in/document-category/archive/",
+    "baseUrl": "https://jeemain.nta.nic.in",
+    "format": "html",
+    "legal": {
+      "confidence": "high",
+      "note": "Official NTA website. Question papers and answer keys made publicly available."
+    },
+    "extraction": {
+      "method": "html-scrape",
+      "available": ["question_paper_pdf", "answer_key_pdf"],
+      "estimated_count": 500
+    }
+  },
+  "sathee_pyq": {
+    "id": "sathee_pyq",
+    "name": "SATHEE JEE PYQ (IIT Kanpur)",
+    "type": "official",
+    "url": "https://sathee.iitk.ac.in/sathee-jee/jee-pyq/",
+    "baseUrl": "https://sathee.iitk.ac.in",
+    "format": "html",
+    "legal": {
+      "confidence": "high",
+      "note": "IIT Kanpur SATHEE platform. Affiliated with NTA. PYQs structured by subject/chapter."
+    },
+    "extraction": {
+      "method": "html-scrape",
+      "available": ["structured_pyq_html"],
+      "estimated_count": 300
+    }
+  }
+}

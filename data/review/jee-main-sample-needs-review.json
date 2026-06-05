@@ -1,0 +1,43 @@
+{
+  "exportedAt": "2026-06-05T14:03:17.963Z",
+  "recordCount": 1,
+  "metadata": {},
+  "records": [
+    {
+      "subject": "CHEMISTRY",
+      "chapter": "Electrochemistry",
+      "topic": "Nernst Equation",
+      "difficulty": "HARD",
+      "type": "INTEGER",
+      "question_text": "The cell potential (in mV) for a concentration cell with ratio of ion concentrations [M²⁺]RHS/[M²⁺]LHS = 10 at 298 K is: (Take 2.303RT/F = 59 mV)",
+      "option_a": null,
+      "option_b": null,
+      "option_c": null,
+      "option_d": null,
+      "option_e": null,
+      "correct_answer": "30",
+      "solution": "E = −(0.059/2) × log(10) = −0.0295 V = 29.5 mV ≈ 30 mV",
+      "year": 2023,
+      "exam_type": "ADVANCED",
+      "nta_weightage": 4,
+      "source_type": "official",
+      "source_name": "JEE Main Official Archive",
+      "source_url": "https://jeemain.nta.nic.in/document-category/archive/",
+      "source_id": "jee_main_official",
+      "source_year": 2023,
+      "paper_label": "JEE Main 2023 Shift 1",
+      "question_number_in_source": null,
+      "extraction_method": "manual_reference",
+      "extraction_date": "2026-06-05T14:03:07.112Z",
+      "extraction_confidence": "medium",
+      "legal_confidence": "high",
+      "raw_text_snippet": "The cell potential (in mV) for a concentration cell with ratio of ion concentrations [M²⁺]RHS/[M²⁺]LHS = 10 at 298 K is: (Take 2.303RT/F = 59 mV)",
+      "manual_review_required": true,
+      "review_notes": "; Needs review: marked_manual_review, warnings: 1",
+      "flag_reasons": [
+        "low_extraction_confidence"
+      ],
+      "duplicate_group_id": null
+    }
+  ]
+}

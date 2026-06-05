@@ -1,0 +1,23 @@
+{
+  "name": "jeemocks-question-ingest",
+  "version": "1.0.0",
+  "description": "JEEmocks question ingestion pipeline — official PYQ extraction, normalization, review, and import",
+  "type": "module",
+  "scripts": {
+    "ingest": "node src/index.js",
+    "fetch": "node src/index.js fetch",
+    "parse": "node src/index.js parse",
+    "validate": "node src/index.js validate",
+    "review": "node src/index.js review",
+    "export": "node src/index.js export",
+    "import": "node src/index.js import --dry-run"
+  },
+  "dependencies": {
+    "puppeteer": "^24.0.0",
+    "pdf-parse": "^1.1.1",
+    "zod": "^3.23.0",
+    "chalk": "^5.3.0",
+    "ora": "^8.0.0",
+    "commander": "^12.0.0"
+  }
+}
