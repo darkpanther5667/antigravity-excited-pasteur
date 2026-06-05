@@ -2,9 +2,8 @@ services:
   - type: web
     name: jeemocks-api
     runtime: node
-    repo: https://github.com/darkpanther5667/antigravity-excited-pasteur
-    buildCommand: cd backend && npm install && npx prisma generate --schema=../database/schema.prisma
-    startCommand: bash start.sh
+    buildCommand: npm install && cd backend && npm install && npx prisma generate --schema=../database/schema.prisma
+    startCommand: npx prisma migrate deploy --schema=database/schema.prisma && node backend/server.js
     healthCheckPath: /api/v1/health
     envVars:
       - key: NODE_ENV
