@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 
 interface FAQItem {
@@ -48,6 +48,7 @@ const faqData: FAQItem[] = [
 ];
 
 export default function FAQ() {
+  const shouldReduceMotion = useReducedMotion();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const toggle = (index: number) => {
@@ -55,14 +56,14 @@ export default function FAQ() {
   };
 
   return (
-    <section id="faq" className="py-20 md:py-28 bg-white dark:bg-[#0d1117]">
+    <section id="faq" className="py-20 md:py-28 bg-white dark:bg-slate-900">
       <div className="max-w-3xl mx-auto px-6">
         <motion.div
           className="text-center mb-12"
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+          transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
         >
           <span className="text-[11px] font-semibold text-brand-600 dark:text-brand-400 uppercase tracking-widest block mb-3">
             FAQ
@@ -82,18 +83,18 @@ export default function FAQ() {
               <motion.div
                 key={idx}
                 className="border border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden bg-white dark:bg-[#161a22]"
-                initial={{ opacity: 0, y: 8 }}
+                initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 6 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.3, delay: idx * 0.04, ease: [0.25, 0.1, 0.25, 1] }}
+                transition={{ duration: 0.3, delay: idx * 0.03, ease: [0.25, 0.1, 0.25, 1] }}
               >
                 <button
                   onClick={() => toggle(idx)}
-                  className="w-full flex items-center justify-between px-5 py-4 text-left text-sm font-medium text-gray-800 dark:text-gray-200 hover:text-brand-700 dark:hover:text-brand-400 transition-colors"
+                  className="w-full flex items-center justify-between px-5 py-4 text-left text-sm font-medium text-gray-800 dark:text-gray-200 hover:text-brand-700 dark:hover:text-brand-400 transition-all duration-[180ms] ease-in-out motion-reduce:transition-none"
                 >
                   <span className="pr-4">{item.question}</span>
                   <ChevronDown
-                    className={`h-4 w-4 shrink-0 text-gray-400 transition-transform duration-200 ${
+                    className={`h-4 w-4 shrink-0 text-gray-400 transition-transform duration-[180ms] ease-in-out motion-reduce:transition-none ${
                       isOpen ? 'rotate-180' : ''
                     }`}
                   />
@@ -105,7 +106,7 @@ export default function FAQ() {
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: 'auto', opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
+                      transition={{ duration: shouldReduceMotion ? 0 : 0.18, ease: [0.25, 0.1, 0.25, 1] }}
                       className="overflow-hidden"
                     >
                       <div className="px-5 pb-4 text-sm text-gray-500 dark:text-gray-400 leading-relaxed border-t border-gray-100 dark:border-gray-800 pt-3">

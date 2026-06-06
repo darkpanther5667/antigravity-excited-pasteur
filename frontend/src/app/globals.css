@@ -37,6 +37,21 @@
     font-family: var(--font-geist-sans), system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    transition: background-color 200ms ease-in-out, color 200ms ease-in-out, border-color 200ms ease-in-out;
+  }
+
+  /* Smooth transitions for theme toggle on interactive & container elements */
+  header, 
+  section, 
+  button, 
+  .border,
+  .bg-white,
+  .dark\:bg-[#161a22],
+  .dark\:bg-slate-900,
+  .dark\:bg-slate-950 {
+    transition-property: background-color, border-color, color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+    transition-duration: 200ms;
   }
 
   @media (prefers-reduced-motion: reduce) {

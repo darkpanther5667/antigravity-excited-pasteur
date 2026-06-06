@@ -6,6 +6,7 @@ import { useAuth } from '../providers/AuthContext';
 import { useTheme } from '../providers/ThemeContext';
 import { Button } from '../ui/Button';
 import { Menu, X, Sun, Moon, GraduationCap } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const NAV_ITEMS = [
   { href: '#simulator', label: 'Exam Simulator' },
@@ -29,9 +30,9 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-200 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-[180ms] ease-in-out motion-reduce:transition-none ${
         isScrolled
-          ? 'bg-white/90 dark:bg-[#0d1117]/90 backdrop-blur-md shadow-[0_1px_2px_rgba(0,0,0,0.06)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.3)] py-3'
+          ? 'bg-white/90 dark:bg-slate-950/90 backdrop-blur-md shadow-[0_1px_2px_rgba(0,0,0,0.06)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.3)] py-3'
           : 'bg-transparent py-5'
       }`}
     >
@@ -63,14 +64,24 @@ export default function Header() {
         <div className="hidden md:flex items-center gap-3">
           <button
             onClick={toggleTheme}
-            className="p-2 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all"
+            className="p-2 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-[180ms] ease-in-out motion-reduce:transition-none overflow-hidden relative flex items-center justify-center h-8 w-8"
             aria-label={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
           >
-            {theme === 'light' ? (
-              <Moon className="h-4 w-4" />
-            ) : (
-              <Sun className="h-4 w-4" />
-            )}
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={theme}
+                initial={{ y: -10, opacity: 0, rotate: -40, scale: 0.8 }}
+                animate={{ y: 0, opacity: 1, rotate: 0, scale: 1 }}
+                exit={{ y: 10, opacity: 0, rotate: 40, scale: 0.8 }}
+                transition={{ duration: 0.18, ease: [0.25, 0.1, 0.25, 1] }}
+              >
+                {theme === 'light' ? (
+                  <Moon className="h-4 w-4" />
+                ) : (
+                  <Sun className="h-4 w-4" />
+                )}
+              </motion.div>
+            </AnimatePresence>
           </button>
 
           {isAuthenticated ? (
@@ -106,51 +117,59 @@ export default function Header() {
       </div>
 
       {/* Mobile Menu */}
-      {isMobileOpen && (
-        <div className="md:hidden bg-white dark:bg-[#0d1117] border-t border-gray-100 dark:border-gray-800 px-6 py-5 space-y-4">
-          <nav className="flex flex-col gap-2">
-            {NAV_ITEMS.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setIsMobileOpen(false)}
-                className="py-2 text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-brand-800 dark:hover:text-white transition-colors"
+      <AnimatePresence>
+        {isMobileOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.22, ease: [0.25, 0.1, 0.25, 1] }}
+            className="md:hidden bg-white dark:bg-slate-950 border-t border-gray-100 dark:border-gray-800 px-6 py-5 space-y-4 overflow-hidden"
+          >
+            <nav className="flex flex-col gap-2">
+              {NAV_ITEMS.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setIsMobileOpen(false)}
+                  className="py-2 text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-brand-800 dark:hover:text-white transition-colors"
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </nav>
+            <div className="flex flex-col gap-2 pt-3 border-t border-gray-100 dark:border-gray-800">
+              <button
+                onClick={() => { toggleTheme(); setIsMobileOpen(false); }}
+                className="flex items-center justify-between w-full py-2 text-sm font-medium text-gray-500 dark:text-gray-400"
               >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-          <div className="flex flex-col gap-2 pt-3 border-t border-gray-100 dark:border-gray-800">
-            <button
-              onClick={() => { toggleTheme(); setIsMobileOpen(false); }}
-              className="flex items-center justify-between w-full py-2 text-sm font-medium text-gray-500 dark:text-gray-400"
-            >
-              <span>Theme</span>
-              <span className="text-gray-400">{theme === 'light' ? 'Dark' : 'Light'}</span>
-            </button>
-            {isAuthenticated ? (
-              <Link href="/dashboard" onClick={() => setIsMobileOpen(false)}>
-                <Button className="w-full bg-brand-800 hover:bg-brand-700 text-white font-semibold">
-                  Dashboard
-                </Button>
-              </Link>
-            ) : (
-              <>
-                <Link href="/login" onClick={() => setIsMobileOpen(false)}>
-                  <Button variant="outline" className="w-full border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-medium">
-                    Log In
-                  </Button>
-                </Link>
-                <Link href="/register" onClick={() => setIsMobileOpen(false)}>
+                <span>Theme</span>
+                <span className="text-gray-400">{theme === 'light' ? 'Dark' : 'Light'}</span>
+              </button>
+              {isAuthenticated ? (
+                <Link href="/dashboard" onClick={() => setIsMobileOpen(false)}>
                   <Button className="w-full bg-brand-800 hover:bg-brand-700 text-white font-semibold">
-                    Try Free Mock
+                    Dashboard
                   </Button>
                 </Link>
-              </>
-            )}
-          </div>
-        </div>
-      )}
+              ) : (
+                <>
+                  <Link href="/login" onClick={() => setIsMobileOpen(false)}>
+                    <Button variant="outline" className="w-full border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-medium">
+                      Log In
+                    </Button>
+                  </Link>
+                  <Link href="/register" onClick={() => setIsMobileOpen(false)}>
+                    <Button className="w-full bg-brand-800 hover:bg-brand-700 text-white font-semibold">
+                      Try Free Mock
+                    </Button>
+                  </Link>
+                </>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }

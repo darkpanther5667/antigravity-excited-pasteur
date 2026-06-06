@@ -8,6 +8,21 @@ const shuffle = (array) => {
   return array;
 };
 
+// Marks based on difficulty level
+const getMarksCorrect = (difficulty) => {
+  switch (difficulty) {
+    case 'EASY': return 3;
+    case 'MEDIUM': return 4;
+    case 'HARD': return 5;
+    default: return 4;
+  }
+};
+
+const getMarksIncorrect = (type, difficulty) => {
+  if (type === 'INTEGER') return 0;
+  return -1;
+};
+
 export const createNtaMainsTest = async (title, scheduledAt, adminId) => {
   const requirements = [
     { subject: 'PHYSICS', type: 'SINGLE', needed: 20 },
@@ -42,14 +57,14 @@ export const createNtaMainsTest = async (title, scheduledAt, adminId) => {
       // Shuffle in memory to guarantee random selection
       const shuffled = shuffle([...questions]);
       const sliced = shuffled.slice(0, req.needed);
-      
+
       // Keep track of section mapping and order within the factory
       sliced.forEach((q, idx) => {
         selectedQuestions.push({
           questionId: q.id,
           section: req.subject,
-          marksCorrect: 4,
-          marksIncorrect: req.type === 'INTEGER' ? 0.00 : -1.00,
+          marksCorrect: getMarksCorrect(q.difficulty),
+          marksIncorrect: getMarksIncorrect(req.type, q.difficulty),
           // Let question order be indexed across the whole test (1 to 75)
           questionOrder: selectedQuestions.length + 1
         });

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { Clock, Eye } from 'lucide-react';
 
 interface MockQuestion {
@@ -53,6 +53,7 @@ const mockQuestions: MockQuestion[] = [
 type QStatus = 'NOT_VISITED' | 'VISITED' | 'ANSWERED' | 'MARKED';
 
 export default function SimulatorMockup() {
+  const shouldReduceMotion = useReducedMotion();
   const [activeSubject, setActiveSubject] = useState<'PHYSICS' | 'CHEMISTRY' | 'MATHS'>('PHYSICS');
   const [selectedAnswers, setSelectedAnswers] = useState<Record<number, string>>({});
   const [questionStatus, setQuestionStatus] = useState<Record<number, QStatus>>({
@@ -118,10 +119,10 @@ export default function SimulatorMockup() {
       <div className="max-w-7xl mx-auto px-6">
         <motion.div
           className="max-w-2xl mb-12"
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+          transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
         >
           <span className="text-[11px] font-semibold text-brand-600 dark:text-brand-400 uppercase tracking-widest block mb-3">
             Exam Simulator
@@ -138,10 +139,10 @@ export default function SimulatorMockup() {
         {/* Simulator Interface */}
         <motion.div
           className="border border-gray-200 dark:border-gray-800 rounded-xl bg-white dark:bg-[#161a22] shadow-xl overflow-hidden"
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.1, ease: [0.25, 0.1, 0.25, 1] }}
+          transition={{ duration: 0.4, delay: 0.1, ease: [0.25, 0.1, 0.25, 1] }}
         >
           <div className="grid grid-cols-1 lg:grid-cols-12">
             {/* Main workspace */}
@@ -161,7 +162,7 @@ export default function SimulatorMockup() {
                   <button
                     key={sub}
                     onClick={() => setActiveSubject(sub)}
-                    className={`px-5 py-3 border-r border-gray-200 dark:border-gray-800 transition-all ${
+                    className={`px-5 py-3 border-r border-gray-200 dark:border-gray-800 transition-all duration-[180ms] ease-in-out motion-reduce:transition-none ${
                       activeSubject === sub
                         ? 'bg-white dark:bg-[#161a22] text-brand-700 dark:text-brand-400 border-b-2 border-b-brand-700 dark:border-b-brand-400 font-semibold'
                         : 'text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800/30'
@@ -192,7 +193,7 @@ export default function SimulatorMockup() {
                         <button
                           key={opt.key}
                           onClick={() => handleOptionSelect(opt.key)}
-                          className={`text-left px-3.5 py-2.5 rounded-lg border text-sm font-medium flex items-center gap-3 transition-all ${
+                          className={`text-left px-3.5 py-2.5 rounded-lg border text-sm font-medium flex items-center gap-3 transition-all duration-[180ms] ease-in-out motion-reduce:transition-none ${
                             isSelected
                               ? 'border-brand-600 bg-brand-50/50 dark:border-brand-500 dark:bg-brand-900/15 text-brand-800 dark:text-brand-300'
                               : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:border-gray-300 dark:hover:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800/30'
@@ -228,20 +229,20 @@ export default function SimulatorMockup() {
                 <div className="flex gap-2">
                   <button
                     onClick={handleMarkReview}
-                    className="px-3.5 py-1.5 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-[#161a22] hover:bg-gray-50 dark:hover:bg-gray-800/30 text-brand-700 dark:text-brand-400 font-semibold transition-colors"
+                    className="px-3.5 py-1.5 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-[#161a22] hover:bg-gray-50 dark:hover:bg-gray-800/30 text-brand-700 dark:text-brand-400 font-semibold transition-all duration-[180ms] ease-in-out motion-reduce:transition-none"
                   >
                     Mark for Review
                   </button>
                   <button
                     onClick={handleClear}
-                    className="px-3.5 py-1.5 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-[#161a22] hover:bg-gray-50 dark:hover:bg-gray-800/30 text-gray-500 dark:text-gray-400 font-medium transition-colors"
+                    className="px-3.5 py-1.5 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-[#161a22] hover:bg-gray-50 dark:hover:bg-gray-800/30 text-gray-500 dark:text-gray-400 font-medium transition-all duration-[180ms] ease-in-out motion-reduce:transition-none"
                   >
                     Clear
                   </button>
                 </div>
                 <button
                   onClick={handleSaveNext}
-                  className="px-5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-semibold shadow-sm transition-colors"
+                  className="px-5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-semibold shadow-sm transition-all duration-[180ms] ease-in-out motion-reduce:transition-none"
                 >
                   Save &amp; Next
                 </button>
@@ -304,7 +305,7 @@ export default function SimulatorMockup() {
 
               {/* Submit */}
               <div className="pt-4 border-t border-gray-200 dark:border-gray-800">
-                <button className="w-full py-2.5 bg-brand-800 hover:bg-brand-700 text-white text-xs font-semibold rounded-lg shadow-sm transition-colors">
+                <button className="w-full py-2.5 bg-brand-800 hover:bg-brand-700 text-white text-xs font-semibold rounded-lg shadow-sm transition-all duration-[180ms] ease-in-out hover:-translate-y-0.5 active:translate-y-0 motion-reduce:transition-none motion-reduce:transform-none">
                   Submit Test Paper
                 </button>
               </div>

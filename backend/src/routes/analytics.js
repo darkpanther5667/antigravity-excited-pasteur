@@ -1,5 +1,5 @@
 import express from 'express';
-import { 
+import {
   getMyOverview,
   getMySubjectBreakdown,
   getMyChapterHeatmap,
@@ -9,6 +9,7 @@ import {
   getTestTopperData,
   getMySwotReport
 } from '../controllers/analyticsController.js';
+import { downloadPdfReport, listReports } from '../controllers/pdfReportController.js';
 import { auth } from '../middleware/auth.js';
 import { requirePlan } from '../middleware/requirePlan.js';
 
@@ -25,5 +26,9 @@ router.get('/me/progress', getMyProgress);
 router.get('/me/swot', requirePlan('PRO'), getMySwotReport);
 router.get('/test/:testId/compare/:attemptId', getTestComparisonData);
 router.get('/test/:testId/topper', getTestTopperData);
+
+// PDF report routes
+router.get('/reports', listReports);
+router.get('/reports/:type', downloadPdfReport);
 
 export default router;

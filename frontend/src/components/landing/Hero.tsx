@@ -2,13 +2,38 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { Button } from '../ui/Button';
 import { GraduationCap, BarChart3, Clock, FileText } from 'lucide-react';
 
 export default function Hero() {
+  const shouldReduceMotion = useReducedMotion();
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.05,
+        delayChildren: 0.15,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 8 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.3,
+        ease: [0.25, 0.1, 0.25, 1] as const,
+      },
+    },
+  };
+
   return (
-    <section className="relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28 bg-[#f8f7f4] dark:bg-[#0d1117]">
+    <section className="relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28 bg-[#fafaf7] dark:bg-slate-950">
       {/* Subtle warm texture overlay */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-10%,rgba(30,58,95,0.04),transparent_60%)] dark:bg-[radial-gradient(ellipse_80%_50%_at_50%_-10%,rgba(74,123,181,0.06),transparent_60%)]" />
 
@@ -17,9 +42,9 @@ export default function Hero() {
           {/* Left: Text */}
           <motion.div
             className="lg:col-span-5 space-y-8 text-center lg:text-left"
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
+            transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
           >
             {/* Badge */}
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-50 dark:bg-brand-900/30 border border-brand-100 dark:border-brand-800/40">
@@ -45,7 +70,7 @@ export default function Hero() {
             {/* CTA */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               <Link href="/register">
-                <Button className="bg-brand-800 hover:bg-brand-700 text-white font-semibold h-12 px-8 text-sm shadow-lg shadow-brand-900/10 dark:shadow-black/20 transition-all duration-200 hover:-translate-y-0.5">
+                <Button className="bg-brand-800 hover:bg-brand-700 text-white font-semibold h-12 px-8 text-sm shadow-lg shadow-brand-900/10 dark:shadow-black/20 hover:-translate-y-0.5 hover:shadow-xl transition-all duration-[180ms] ease-in-out active:translate-y-0 active:shadow-md">
                   Try Free Mock Test
                 </Button>
               </Link>
@@ -58,14 +83,19 @@ export default function Hero() {
 
             {/* Trust Strip */}
             <div className="pt-6 border-t border-gray-200/70 dark:border-gray-800/50">
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-5 text-center lg:text-left">
+              <motion.div 
+                className="grid grid-cols-2 sm:grid-cols-4 gap-5 text-center lg:text-left"
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
+              >
                 {[
                   { icon: GraduationCap, label: 'JEE Pattern', sub: 'Main & Advanced' },
                   { icon: Clock, label: 'Realistic Timing', sub: 'NTA Controls' },
                   { icon: BarChart3, label: 'Chapter Analytics', sub: 'Weak Areas' },
                   { icon: FileText, label: 'Detailed Solutions', sub: 'Step-by-Step' },
                 ].map((item) => (
-                  <div key={item.label} className="space-y-1">
+                  <motion.div key={item.label} className="space-y-1" variants={itemVariants}>
                     <div className="flex items-center gap-1.5 justify-center lg:justify-start">
                       <item.icon className="h-3.5 w-3.5 text-brand-500 dark:text-brand-400" />
                       <span className="text-[12px] font-semibold text-brand-900 dark:text-white">
@@ -73,18 +103,18 @@ export default function Hero() {
                       </span>
                     </div>
                     <p className="text-[11px] text-gray-400 dark:text-gray-500">{item.sub}</p>
-                  </div>
+                  </motion.div>
                 ))}
-              </div>
+              </motion.div>
             </div>
           </motion.div>
 
           {/* Right: Exam Simulator Visual */}
           <motion.div
             className="lg:col-span-7"
-            initial={{ opacity: 0, y: 32 }}
+            initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.15, ease: [0.25, 0.1, 0.25, 1] }}
+            transition={{ duration: 0.4, delay: 0.1, ease: [0.25, 0.1, 0.25, 1] }}
           >
             <div className="relative">
               {/* Subtle glow behind */}

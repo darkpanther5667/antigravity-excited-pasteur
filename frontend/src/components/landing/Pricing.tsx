@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { Button } from '../ui/Button';
 import { Check } from 'lucide-react';
 
@@ -62,15 +62,16 @@ const plans = [
 ];
 
 export default function Pricing() {
+  const shouldReduceMotion = useReducedMotion();
   return (
-    <section id="pricing" className="py-20 md:py-28 bg-[#f8f7f4] dark:bg-[#0d1117]">
+    <section id="pricing" className="py-20 md:py-28 bg-[#fafaf7] dark:bg-slate-950">
       <div className="max-w-7xl mx-auto px-6">
         <motion.div
           className="max-w-2xl mx-auto text-center mb-14"
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+          transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
         >
           <span className="text-[11px] font-semibold text-brand-600 dark:text-brand-400 uppercase tracking-widest block mb-3">
             Plans & Pricing
@@ -88,15 +89,15 @@ export default function Pricing() {
           {plans.map((plan, i) => (
             <motion.div
               key={plan.name}
-              className={`relative flex flex-col rounded-xl border bg-white dark:bg-[#161a22] p-6 md:p-8 ${
+              className={`relative flex flex-col rounded-xl border bg-white dark:bg-[#161a22] p-6 md:p-8 hover:-translate-y-0.5 hover:shadow-xl dark:hover:shadow-black/30 transition-all duration-[180ms] ease-in-out motion-reduce:transition-none motion-reduce:transform-none ${
                 plan.highlighted
                   ? 'border-brand-700 dark:border-brand-500 shadow-lg shadow-brand-900/5 dark:shadow-brand-900/20 scale-[1.02] md:scale-105'
-                  : 'border-gray-200 dark:border-gray-800'
+                  : 'border-gray-200 dark:border-gray-800 hover:border-brand-300 dark:hover:border-brand-800/60'
               }`}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 12 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: i * 0.1, ease: [0.25, 0.1, 0.25, 1] }}
+              transition={{ duration: 0.35, delay: i * 0.08, ease: [0.25, 0.1, 0.25, 1] }}
             >
               {plan.highlighted && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-brand-800 dark:bg-brand-600 text-white text-[10px] font-semibold px-3 py-1 rounded-full">

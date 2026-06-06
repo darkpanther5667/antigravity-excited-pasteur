@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 
 type TabKey = 'coverage' | 'gaps' | 'compare';
 
@@ -104,19 +104,20 @@ const levelBar = {
 };
 
 export default function AnalyticsShowcase() {
+  const shouldReduceMotion = useReducedMotion();
   const [activeTab, setActiveTab] = useState<TabKey>('coverage');
 
   const currentData = chapterData[activeTab];
 
   return (
-    <section id="analytics" className="py-20 md:py-28 bg-white dark:bg-[#0d1117]">
+    <section id="analytics" className="py-20 md:py-28 bg-white dark:bg-slate-900">
       <div className="max-w-7xl mx-auto px-6">
         <motion.div
           className="max-w-2xl mb-12"
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+          transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
         >
           <span className="text-[11px] font-semibold text-brand-600 dark:text-brand-400 uppercase tracking-widest block mb-3">
             Performance Analytics
@@ -136,7 +137,7 @@ export default function AnalyticsShowcase() {
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
-              className={`px-4 py-2 text-xs font-medium rounded-lg transition-all ${
+              className={`px-4 py-2 text-xs font-medium rounded-lg transition-all duration-[180ms] ease-in-out motion-reduce:transition-none ${
                 activeTab === tab.key
                   ? 'bg-white dark:bg-[#161a22] text-brand-800 dark:text-brand-300 shadow-sm'
                   : 'text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300'
@@ -151,10 +152,10 @@ export default function AnalyticsShowcase() {
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}
-            initial={{ opacity: 0, y: 8 }}
+            initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 6 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
+            exit={{ opacity: 0, y: shouldReduceMotion ? 0 : -6 }}
+            transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
             className="bg-gray-50/50 dark:bg-[#11151d]/30 border border-gray-200 dark:border-gray-800 rounded-xl p-6 md:p-8"
           >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

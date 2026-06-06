@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { Monitor, Shield, BarChart3, BookOpen } from 'lucide-react';
 
 const features = [
@@ -40,15 +40,16 @@ const features = [
 ];
 
 export default function WhyDifferent() {
+  const shouldReduceMotion = useReducedMotion();
   return (
-    <section id="features" className="py-20 md:py-28 bg-[#f8f7f4] dark:bg-[#0d1117]">
+    <section id="features" className="py-20 md:py-28 bg-[#fafaf7] dark:bg-slate-950">
       <div className="max-w-7xl mx-auto px-6">
         <motion.div
           className="max-w-2xl mb-14"
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+          transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
         >
           <span className="text-[11px] font-semibold text-brand-600 dark:text-brand-400 uppercase tracking-widest block mb-3">
             Why This Works
@@ -67,11 +68,11 @@ export default function WhyDifferent() {
           {features.map((feature, i) => (
             <motion.div
               key={feature.title}
-              className="group bg-white dark:bg-[#161a22] border border-gray-200 dark:border-gray-800 rounded-xl p-6 md:p-8 hover:border-gray-300 dark:hover:border-gray-700 transition-all duration-200"
-              initial={{ opacity: 0, y: 16 }}
+              className="group bg-white dark:bg-[#161a22] border border-gray-200 dark:border-gray-800 rounded-xl p-6 md:p-8 hover:border-brand-300 dark:hover:border-brand-800/60 hover:-translate-y-0.5 hover:shadow-md dark:hover:shadow-black/20 transition-all duration-[180ms] ease-in-out motion-reduce:transition-none motion-reduce:transform-none"
+              initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 12 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: i * 0.08, ease: [0.25, 0.1, 0.25, 1] }}
+              transition={{ duration: 0.35, delay: i * 0.05, ease: [0.25, 0.1, 0.25, 1] }}
             >
               <div className={`h-10 w-10 rounded-lg ${feature.bgColor} flex items-center justify-center ${feature.color} mb-4`}>
                 <feature.icon className="h-5 w-5" />
@@ -89,10 +90,10 @@ export default function WhyDifferent() {
         {/* NTA Palette Legend — inline visual proof */}
         <motion.div
           className="mt-10 bg-white dark:bg-[#161a22] border border-gray-200 dark:border-gray-800 rounded-xl p-5 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-xs"
-          initial={{ opacity: 0, y: 12 }}
+          initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 8 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.4, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+          transition={{ duration: 0.35, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
         >
           <span className="font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider text-[10px]">
             NTA Status Palette:

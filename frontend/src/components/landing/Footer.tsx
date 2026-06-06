@@ -20,14 +20,14 @@ export default function Footer() {
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
             <Link href="/register">
-              <Button className="bg-brand-600 hover:bg-brand-500 text-white font-semibold h-11 px-8 shadow-lg shadow-black/20 text-sm">
+              <Button className="bg-brand-600 hover:bg-brand-500 text-white font-semibold h-11 px-8 shadow-lg shadow-black/20 hover:-translate-y-0.5 hover:shadow-xl transition-all duration-[180ms] ease-in-out active:translate-y-0 motion-reduce:transition-none motion-reduce:transform-none text-sm">
                 Try Free Mock Test
               </Button>
             </Link>
             <Link href="/login">
               <Button
                 variant="outline"
-                className="border-brand-700 text-gray-300 hover:bg-brand-800 hover:text-white font-medium h-11 px-8 text-sm"
+                className="border-brand-700 text-gray-300 hover:bg-brand-800 hover:text-white font-medium h-11 px-8 transition-all duration-[180ms] ease-in-out motion-reduce:transition-none text-sm"
               >
                 Sign In
               </Button>
